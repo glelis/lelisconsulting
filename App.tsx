@@ -17,9 +17,13 @@ function getRoute(): Route {
 
 const App: React.FC = () => {
   const [route, setRoute] = useState<Route>(typeof window !== 'undefined' ? getRoute() : 'home');
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
-    const onHash = () => setRoute(getRoute());
+    const onHash = () => {
+      setRoute(getRoute());
+      setMenuOpen(false);
+    };
     window.addEventListener('hashchange', onHash);
     return () => window.removeEventListener('hashchange', onHash);
   }, []);
@@ -42,17 +46,40 @@ const App: React.FC = () => {
   return (
     <div className="min-h-screen selection:bg-white selection:text-black bg-black font-mono">
       {/* Navigation */}
-      <nav className="fixed top-0 left-0 w-full px-8 py-6 z-40 bg-black/90 border-b border-white/5 backdrop-blur-md">
+      <nav className="fixed top-0 left-0 w-full px-6 md:px-8 py-5 md:py-6 z-40 bg-black/90 border-b border-white/5 backdrop-blur-md">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
-          <div className="text-white font-bold tracking-[0.4em] text-lg font-sans">
+          <a href="#home" className="text-white font-bold tracking-[0.25em] sm:tracking-[0.4em] text-sm sm:text-lg font-sans">
             LELIS.CONSULTING
-          </div>
+          </a>
+          {/* Desktop links */}
           <div className="hidden md:flex gap-8 text-[10px] tracking-[0.3em] font-light">
             <a href="#home" className="text-zinc-500 hover:text-white transition-colors">01. HOME</a>
             <a href="#solutions" className="text-zinc-500 hover:text-white transition-colors">02. SOLUTIONS</a>
             <a href="#/case-studies" className={`transition-colors ${route === 'case-studies' ? 'text-white' : 'text-zinc-500 hover:text-white'}`}>03. CASE_STUDIES</a>
             <a href="#/about" className={`transition-colors ${route === 'about' ? 'text-white' : 'text-zinc-500 hover:text-white'}`}>04. ABOUT</a>
             <a href="#/contact" className={`transition-colors ${route === 'contact' ? 'text-white' : 'text-zinc-500 hover:text-white'}`}>05. CONTACT</a>
+          </div>
+          {/* Mobile hamburger toggle */}
+          <button
+            type="button"
+            aria-label="Toggle navigation menu"
+            aria-expanded={menuOpen}
+            onClick={() => setMenuOpen(o => !o)}
+            className="md:hidden flex flex-col justify-center items-center w-10 h-10 -mr-2 gap-[5px] text-white"
+          >
+            <span className={`block h-[1.5px] w-6 bg-white transition-transform duration-300 ${menuOpen ? 'translate-y-[6.5px] rotate-45' : ''}`}></span>
+            <span className={`block h-[1.5px] w-6 bg-white transition-opacity duration-300 ${menuOpen ? 'opacity-0' : 'opacity-100'}`}></span>
+            <span className={`block h-[1.5px] w-6 bg-white transition-transform duration-300 ${menuOpen ? '-translate-y-[6.5px] -rotate-45' : ''}`}></span>
+          </button>
+        </div>
+        {/* Mobile dropdown panel */}
+        <div className={`md:hidden overflow-hidden transition-all duration-300 ease-out ${menuOpen ? 'max-h-96 opacity-100 mt-5' : 'max-h-0 opacity-0 mt-0'}`}>
+          <div className="flex flex-col gap-1 text-xs tracking-[0.3em] font-light border-t border-white/10 pt-4">
+            <a href="#home" onClick={() => setMenuOpen(false)} className="py-3 text-zinc-400 hover:text-white transition-colors">01. HOME</a>
+            <a href="#solutions" onClick={() => setMenuOpen(false)} className="py-3 text-zinc-400 hover:text-white transition-colors">02. SOLUTIONS</a>
+            <a href="#/case-studies" onClick={() => setMenuOpen(false)} className={`py-3 transition-colors ${route === 'case-studies' ? 'text-white' : 'text-zinc-400 hover:text-white'}`}>03. CASE_STUDIES</a>
+            <a href="#/about" onClick={() => setMenuOpen(false)} className={`py-3 transition-colors ${route === 'about' ? 'text-white' : 'text-zinc-400 hover:text-white'}`}>04. ABOUT</a>
+            <a href="#/contact" onClick={() => setMenuOpen(false)} className={`py-3 transition-colors ${route === 'contact' ? 'text-white' : 'text-zinc-400 hover:text-white'}`}>05. CONTACT</a>
           </div>
         </div>
       </nav>
