@@ -1,0 +1,8 @@
+{
+  "name": "Lelis Consulting - Enterprise AI",
+  "description": "Enterprise AI from Prototype to Production. Scalable Machine Learning Solutions for Industrial & Financial Leaders. Based in Basel, Switzerland.",
+  "requestFramePermissions": [
+    "microphone"
+  ],
+  "majorCapabilities": []
+}
